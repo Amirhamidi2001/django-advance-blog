@@ -189,7 +189,7 @@
             <div class="post">
                 <h2><a href="{% url 'blog:post-detail' post.pk %}">{{ post.title }}</a></h2>
                 <div class="meta">
-                    By {{ post.author }} | {{ post.created_at|date:"F j, Y" }}
+                    By {{ post.author.first_name }} | {{ post.created_at|date:"F j, Y" }}
                 </div>
                 {% if post.image %}
                     <img src="{{ post.image.url }}" alt="{{ post.title }}">
