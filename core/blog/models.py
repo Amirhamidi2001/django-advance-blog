@@ -1,8 +1,8 @@
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 
-User = get_user_model()
+# from django.contrib.auth import get_user_model
+# User = get_user_model()
 
 
 class Category(models.Model):
@@ -26,7 +26,7 @@ class Post(models.Model):
     """
 
     title = models.CharField(max_length=200)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey("accounts.UserProfile", on_delete=models.CASCADE)
     status = models.BooleanField(default=0)
     content = models.TextField()
     image = models.ImageField(null=True, blank=True)
