@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Post - {{ object.title }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafafa;
+            color: #333;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .delete-container {
+            max-width: 600px;
+            margin: 100px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #900090;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-delete {
+            background-color: #d00000;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #a00000;
+        }
+
+        .btn-cancel {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background-color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="delete-container">
+        <h1>Delete Post</h1>
+        <p>Are you sure you want to delete <strong>{{ object.title }}</strong>?</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="btn-group">
+                <button type="submit" class="btn btn-delete">Yes, Delete</button>
+                <a href="{% url 'blog:post-detail' object.pk %}" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - Blog</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafafa;
+            color: #333;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+    
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: #222;
+        }
+    
+        a {
+            color: #900090;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+    
+        a:hover {
+            color: #900090;
+        }
+    
+        /* Header Styles */
+        header {
+            background-color: #900090;
+            padding: 20px 0;
+            color: white;
+        }
+    
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    
+        .logo a {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+    
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+    
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+    
+        nav ul li a:hover {
+            color: #ffcc00;
+        }
+
+        /* Post Detail */
+        .post-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    
+        .post-detail {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+    
+        .post-detail h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+    
+        .meta {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 20px;
+        }
+    
+        .post-detail img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            object-fit: cover;
+        }
+    
+        .post-detail p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+    
+        .back-link {
+            display: inline-block;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="{% url 'blog:index' %}">My Blog</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'blog:index' %}">Home</a></li>
+                    <li><a href="{% url 'blog:post-list' %}">Blog</a></li>
+                    <li><a href="{% url 'blog:contact' %}">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Post Detail Section -->
+    <div class="post-detail-container">
+        <div class="post-detail">
+            <h2>{{ post.title }}</h2>
+            <div class="meta">
+                By {{ post.author }} | {{ post.created_at|date:"F j, Y" }}
+            </div>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}">
+            {% endif %}
+            <p>{{ post.content }}</p>
+            <div>
+                <a class="back-link" href="{% url 'blog:post-list' %}">Back to Blog</a>
+            </div>
+            <div>
+                <a class="back-link" href="{% url 'blog:post-edit' post.pk %}">Edit</a>
+            </div>
+            <div>
+                <a class="back-link" href="{% url 'blog:post-delete' post.pk %}">Delete</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
