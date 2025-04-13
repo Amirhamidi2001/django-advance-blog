@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts.apps.AccountsConfig",
     "blog.apps.BlogConfig",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -138,3 +139,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # config custom user model
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+# Rest Framework Setting the permission policy
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ]
+}
