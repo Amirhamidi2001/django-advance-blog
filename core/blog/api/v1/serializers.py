@@ -17,12 +17,6 @@ class PostSerializer(serializers.ModelSerializer):
     Serializer for Post model.
     """
 
-    # category = CategorySerializer(many=True)
-    category = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all(), many=True
-    )
-    author = serializers.StringRelatedField()
-
     class Meta:
         model = Post
-        fields = ["id", "title", "author", "content", "category", "published_at"]
+        fields = ["id", "title", "author", "status", "content", "category", "published_at"]
