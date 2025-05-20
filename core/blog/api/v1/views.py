@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 from blog.models import Post
 from .serializers import PostSerializer
@@ -51,81 +52,99 @@ from .serializers import PostSerializer
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class PostList(APIView):
-    """
-    A class-based API view for listing and creating posts
-    """
+# class PostList(APIView):
+#     """
+#     A class-based API view for listing and creating posts
+#     """
 
-    permission_classes = [IsAuthenticated]
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = PostSerializer
+
+#     def get(self, request, format=None):
+#         """
+#         Retrieves a list of active posts.
+#         """
+#         posts = Post.objects.filter(status=True)
+#         serializer = self.serializer_class(posts, many=True)
+#         return Response(serializer.data)
+
+#     def post(self, request, format=None):
+#         """
+#         Creates a new post if the data is valid.
+#         """
+#         serializer = self.serializer_class(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class PostDetail(APIView):
+#     """
+#     A class-based API view for retrieving, updating, and deleting a specific post
+#     """
+
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = PostSerializer
+
+#     def get_object(self, pk):
+#         """
+#         Retrieve a single post by its primary key (pk).
+#         """
+#         return get_object_or_404(Post, pk=pk, status=True)
+
+#     def get(self, request, pk):
+#         """
+#         Retrieves the details of a specific post.
+#         """
+#         post = self.get_object(pk)
+#         serializer = self.serializer_class(post)
+#         return Response(serializer.data)
+
+#     def put(self, request, pk):
+#         """
+#         Updates a specific post if the data is valid.
+#         """
+#         post = self.get_object(pk)
+#         serializer = self.serializer_class(post, data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data)
+
+#     def patch(self, request, pk):
+#         """
+#         Partially updates a specific post if the data is valid.
+#         """
+#         post = self.get_object(pk)
+#         serializer = self.serializer_class(post, data=request.data, partial=True)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data)
+
+#     def delete(self, request, pk):
+#         """
+#         Deletes a specific post.
+#         """
+#         post = self.get_object(pk)
+#         post.delete()
+#         return Response(
+#             {"detail": "Deleted successfully"}, status=status.HTTP_204_NO_CONTENT
+#         )
+
+
+class PostList(ListCreateAPIView):
+    """
+    View for listing and creating posts.
+    """
     serializer_class = PostSerializer
-
-    def get(self, request, format=None):
-        """
-        Retrieves a list of active posts.
-        """
-        posts = Post.objects.filter(status=True)
-        serializer = self.serializer_class(posts, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        """
-        Creates a new post if the data is valid.
-        """
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class PostDetail(APIView):
-    """
-    A class-based API view for retrieving, updating, and deleting a specific post
-    """
-
     permission_classes = [IsAuthenticated]
+    queryset = Post.objects.filter(status=True)
+
+
+class PostDetail(RetrieveUpdateDestroyAPIView):
+    """
+    View for retrieving, updating, and deleting a specific post.
+    """
     serializer_class = PostSerializer
-
-    def get_object(self, pk):
-        """
-        Retrieve a single post by its primary key (pk).
-        """
-        return get_object_or_404(Post, pk=pk, status=True)
-
-    def get(self, request, pk):
-        """
-        Retrieves the details of a specific post.
-        """
-        post = self.get_object(pk)
-        serializer = self.serializer_class(post)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        """
-        Updates a specific post if the data is valid.
-        """
-        post = self.get_object(pk)
-        serializer = self.serializer_class(post, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    def patch(self, request, pk):
-        """
-        Partially updates a specific post if the data is valid.
-        """
-        post = self.get_object(pk)
-        serializer = self.serializer_class(post, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    def delete(self, request, pk):
-        """
-        Deletes a specific post.
-        """
-        post = self.get_object(pk)
-        post.delete()
-        return Response(
-            {"detail": "Deleted successfully"}, status=status.HTTP_204_NO_CONTENT
-        )
+    permission_classes = [IsAuthenticated]
+    queryset = Post.objects.filter(status=True)
