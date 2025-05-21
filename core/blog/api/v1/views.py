@@ -4,10 +4,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import viewsets
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
-from blog.models import Post
-from .serializers import PostSerializer
+from blog.models import Post, Category
+from .serializers import PostSerializer, CategorySerializer
 
 
 
@@ -132,19 +133,37 @@ from .serializers import PostSerializer
 #         )
 
 
-class PostList(ListCreateAPIView):
+# class PostList(ListCreateAPIView):
+#     """
+#     View for listing and creating posts.
+#     """
+#     serializer_class = PostSerializer
+#     permission_classes = [IsAuthenticated]
+#     queryset = Post.objects.filter(status=True)
+
+
+# class PostDetail(RetrieveUpdateDestroyAPIView):
+#     """
+#     View for retrieving, updating, and deleting a specific post.
+#     """
+#     serializer_class = PostSerializer
+#     permission_classes = [IsAuthenticated]
+#     queryset = Post.objects.filter(status=True)
+
+
+class PostModelViewSet(viewsets.ModelViewSet):
     """
-    View for listing and creating posts.
+    Viewset for listing, retrieving, creating, updating, and deleting posts.
     """
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
     queryset = Post.objects.filter(status=True)
 
 
-class PostDetail(RetrieveUpdateDestroyAPIView):
+class CategoryModelViewSet(viewsets.ModelViewSet):
     """
-    View for retrieving, updating, and deleting a specific post.
+    Viewset for listing, retrieving, creating, updating, and deleting categories.
     """
-    serializer_class = PostSerializer
+    serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
-    queryset = Post.objects.filter(status=True)
+    queryset = Category.objects.all()
