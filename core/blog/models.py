@@ -41,4 +41,11 @@ class Post(models.Model):
     def __str__(self):
         """Returns the string representation of the post title."""
         return self.title
-    
+
+    def get_snippet(self):
+        """Returns a short snippet of the post content."""
+        return self.content[0:100]
+
+    def get_absolute_api_url(self):
+        """Returns the absolute URL for the API detail view of this post."""
+        return reverse("blog:api-v1:post-detail", kwargs={"pk": self.pk})

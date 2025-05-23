@@ -1,6 +1,8 @@
 from rest_framework.routers import DefaultRouter
 from .views import PostModelViewSet, CategoryModelViewSet
 
+app_name = "api-v1"
+
 router = DefaultRouter()
 router.register("posts", PostModelViewSet, basename="post")
 router.register("categories", CategoryModelViewSet, basename="category")
