@@ -20,6 +20,12 @@ class PostSerializer(serializers.ModelSerializer):
     snippet = serializers.ReadOnlyField(source="get_snippet")
     relative_url = serializers.URLField(source="get_absolute_api_url", read_only=True)
     absolute_url = serializers.SerializerMethodField()
+    category = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Category.objects.all(), write_only=True
+    )
+    category_names = serializers.StringRelatedField(
+        many=True, source="category", read_only=True
+    )
 
     class Meta:
         model = Post
@@ -30,6 +36,7 @@ class PostSerializer(serializers.ModelSerializer):
             "content",
             "snippet",
             "category",
+            "category_names",
             "status",
             "relative_url",
             "absolute_url",
@@ -41,4 +48,3 @@ class PostSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         url = obj.get_absolute_api_url()
         return request.build_absolute_uri(url) if request else url
-
