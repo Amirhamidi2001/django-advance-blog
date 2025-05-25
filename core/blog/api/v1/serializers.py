@@ -48,3 +48,14 @@ class PostSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         url = obj.get_absolute_api_url()
         return request.build_absolute_uri(url) if request else url
+
+    def to_representation(self, instance):
+        request = self.context.get("request")
+        rep = super().to_representation(instance)
+        if request.parser_context.get("kwargs").get("pk"):
+            rep.pop("snippet", None)
+            rep.pop("relative_url", None)
+            rep.pop("absolute_url", None)
+        else:
+            rep.pop("content", None)
+        return rep
