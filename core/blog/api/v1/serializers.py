@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from blog.models import Category, Post
+from accounts.models import UserProfile
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -59,3 +60,9 @@ class PostSerializer(serializers.ModelSerializer):
         else:
             rep.pop("content", None)
         return rep
+
+    def create(self, validated_data):
+        validated_data["author"] = UserProfile.objects.get(
+            user__id=self.context.get("request").user.id
+        )
+        return super().create(validated_data)
