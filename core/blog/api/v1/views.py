@@ -9,7 +9,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 
 from blog.models import Post, Category
 from .serializers import PostSerializer, CategorySerializer
-
+from .permissions import IsOwnerOrReadOnly
 
 
 # @api_view(["GET", "POST"])
@@ -156,7 +156,7 @@ class PostModelViewSet(viewsets.ModelViewSet):
     Viewset for listing, retrieving, creating, updating, and deleting posts.
     """
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     queryset = Post.objects.filter(status=True)
 
 
