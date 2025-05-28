@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from blog.models import Post, Category
 from .serializers import PostSerializer, CategorySerializer
@@ -37,7 +39,7 @@ from .permissions import IsOwnerOrReadOnly
 #     Retrieve, update, or delete a code post.
 #     """
 #     post = get_object_or_404(Post, pk=pk, status=True)
-    
+
 #     if request.method == "GET":
 #         serializer = PostSerializer(post)
 #         return Response(serializer.data)
@@ -155,15 +157,21 @@ class PostModelViewSet(viewsets.ModelViewSet):
     """
     Viewset for listing, retrieving, creating, updating, and deleting posts.
     """
+
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     queryset = Post.objects.filter(status=True)
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ["category", "author", "status"]
+    search_fields = ["title", "content"]
+    ordering_fields = ["published_at"]
 
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
     """
     Viewset for listing, retrieving, creating, updating, and deleting categories.
     """
+
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
     queryset = Category.objects.all()
