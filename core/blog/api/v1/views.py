@@ -12,6 +12,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from blog.models import Post, Category
 from .serializers import PostSerializer, CategorySerializer
 from .permissions import IsOwnerOrReadOnly
+from .paginations import CustomPagination
 
 
 # @api_view(["GET", "POST"])
@@ -165,6 +166,7 @@ class PostModelViewSet(viewsets.ModelViewSet):
     filterset_fields = ["category", "author", "status"]
     search_fields = ["title", "content"]
     ordering_fields = ["published_at"]
+    pagination_class = CustomPagination
 
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
