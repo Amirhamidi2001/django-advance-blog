@@ -7,6 +7,10 @@ User = get_user_model()
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    """
+    Serializer for registering a new user.
+    """
+
     password = serializers.CharField(max_length=255, write_only=True)
     password1 = serializers.CharField(max_length=255, write_only=True)
 
@@ -28,3 +32,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop("password1", None)
         return User.objects.create_user(**validated_data)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for displaying basic user information.
+    """
+
+    class Meta:
+        model = User
+        fields = ("id", "email")
