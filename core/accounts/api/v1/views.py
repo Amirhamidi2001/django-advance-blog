@@ -10,6 +10,7 @@ from .serializers import (
     RegistrationSerializer,
     UserSerializer,
     CustomTokenObtainPairSerializer,
+    ChangePasswordSerializer,
 )
 
 
@@ -65,3 +66,37 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     """
 
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class ChangePasswordView(generics.GenericAPIView):
+    """
+    API endpoint for allowing authenticated users to change their password.
+    """
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            old_password = serializer.validated_data.get("old_password")
+            new_password = serializer.validated_data.get("new_password")
+
+            if not user.check_password(old_password):
+                return Response(
+                    {"old_password": ["Incorrect password."]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            user.set_password(new_password)
+            user.save()
+
+            return Response(
+                {"detail": "Password updated successfully."},
+                status=status.HTTP_200_OK,
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

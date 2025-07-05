@@ -4,6 +4,7 @@ from .views import (
     CustomAuthToken,
     CustomDiscardAuthToken,
     CustomTokenObtainPairView,
+    ChangePasswordView,
 )
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -14,6 +15,7 @@ app_name = "api-v1"
 
 urlpatterns = [
     path("register/", RegistrationApiView.as_view(), name="register"),
+    path("change-password/", ChangePasswordView.as_view(), name="change-password"),
     path("token/login/", CustomAuthToken.as_view(), name="token-login"),
     path("token/logout/", CustomDiscardAuthToken.as_view(), name="token-logout"),
     path("jwt/create/", CustomTokenObtainPairView.as_view(), name="jwt-create"),

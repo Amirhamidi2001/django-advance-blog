@@ -1,7 +1,8 @@
-from django.contrib.auth.password_validation import validate_password
-from django.core import exceptions
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model()
@@ -25,7 +26,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         try:
             validate_password(attrs.get("password"))
-        except exceptions.ValidationError as e:
+        except ValidationError as e:
             raise serializers.ValidationError({"password": list(e.messages)})
 
         return attrs
@@ -57,3 +58,26 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         validated_data["email"] = self.user.email
         validated_data["user_id"] = self.user.id
         return validated_data
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer for handling password change requests.
+    """
+
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    confirm_password = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        if attrs["new_password"] != attrs["confirm_password"]:
+            raise serializers.ValidationError(
+                {"confirm_password": "Passwords do not match."}
+            )
+
+        try:
+            validate_password(attrs["new_password"])
+        except ValidationError as e:
+            raise serializers.ValidationError({"new_password": list(e.messages)})
+
+        return attrs
