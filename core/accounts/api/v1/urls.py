@@ -5,6 +5,7 @@ from .views import (
     CustomDiscardAuthToken,
     CustomTokenObtainPairView,
     ChangePasswordView,
+    UserProfileDetailView,
 )
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -21,4 +22,5 @@ urlpatterns = [
     path("jwt/create/", CustomTokenObtainPairView.as_view(), name="jwt-create"),
     path("jwt/refresh/", TokenRefreshView.as_view(), name="jwt-refresh"),
     path("jwt/verify/", TokenVerifyView.as_view(), name="jwt-verify"),
+    path("profile/", UserProfileDetailView.as_view(), name="user-profile"),
 ]

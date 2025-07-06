@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from ...models import UserProfile
+
 User = get_user_model()
 
 
@@ -81,3 +83,23 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError({"new_password": list(e.messages)})
 
         return attrs
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the UserProfile model.
+    """
+
+    email = serializers.EmailField(source="user.email", read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = [
+            "email",
+            "first_name",
+            "last_name",
+            "bio",
+            "profile_picture",
+            "birth_date",
+        ]
+        read_only_fields = ["email"]
