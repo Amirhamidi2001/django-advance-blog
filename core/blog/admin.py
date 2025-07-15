@@ -32,5 +32,6 @@ class PostAdmin(admin.ModelAdmin):
     filter_horizontal = ("category",)
     empty_value_display = "-empty-"
 
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)

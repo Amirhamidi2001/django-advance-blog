@@ -1,0 +1,17 @@
+[flake8]
+max-line-length = 88
+exclude =
+    .git,
+    __pycache__,
+    env,
+    venv,
+    .venv,
+    migrations,
+    manage.py
+
+ignore =
+    E203,
+    W503
+
+per-file-ignores =
+    core/core/settings.py

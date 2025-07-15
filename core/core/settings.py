@@ -147,20 +147,20 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 
 # Rest Framework Setting the permission policy
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
     ]
 }
 
 # Django Email Settings for smtp4dev
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp4dev'         
-EMAIL_PORT = 25                 
-EMAIL_HOST_USER = ''             
-EMAIL_HOST_PASSWORD = ''
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp4dev"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
-DEFAULT_FROM_EMAIL = 'test@example.com'
+DEFAULT_FROM_EMAIL = "test@example.com"
