@@ -4,6 +4,7 @@ services:
   web:
     build: .
     container_name: web
+    working_dir: /app
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
@@ -12,3 +13,14 @@ services:
     environment:
       - SECRET_KEY=test
       - DEBUG=True
+    depends_on:
+      - smtp4dev
+
+  smtp4dev:
+    image: rnwood/smtp4dev:latest
+    container_name: smtp4dev
+    ports:
+      - "8080:80"
+      - "25:25"
+      - "143:143"
+    restart: unless-stopped
