@@ -7,8 +7,8 @@ from .models import CustomUser, UserProfile
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     # Define the fields to be displayed in the admin
-    list_display = ("email", "is_staff", "is_active", "last_login")
-    list_filter = ("is_staff", "is_active", "date_joined")
+    list_display = ("email", "is_staff", "is_verified", "is_active", "last_login")
+    list_filter = ("is_staff", "is_verified", "is_active", "date_joined")
     search_fields = ("email",)
     ordering = ("email",)
 
@@ -21,6 +21,7 @@ class CustomUserAdmin(UserAdmin):
                 "fields": (
                     "is_active",
                     "is_staff",
+                    "is_verified",
                     "is_superuser",
                     "groups",
                     "user_permissions",
@@ -40,6 +41,7 @@ class CustomUserAdmin(UserAdmin):
                     "password2",
                     "is_active",
                     "is_staff",
+                    "is_verified",
                     "is_superuser",
                 ),
             },
@@ -69,4 +71,3 @@ class UserProfileAdmin(admin.ModelAdmin):
 # Register the CustomUser, UserProfile model
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
-

@@ -1,6 +1,7 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -38,14 +39,46 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomAuthTokenSerializer(serializers.Serializer):
     """
-    Serializer for displaying basic user information.
+    Serializer for user authentication using email and password.
     """
 
-    class Meta:
-        model = User
-        fields = ("id", "email")
+    email = serializers.CharField(label=_("Email"), write_only=True)
+    password = serializers.CharField(
+        label=_("Password"),
+        style={"input_type": "password"},
+        trim_whitespace=False,
+        write_only=True,
+    )
+    token = serializers.CharField(label=_("Token"), read_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get("email")
+        password = attrs.get("password")
+
+        if email and password:
+            user = authenticate(
+                request=self.context.get("request"),
+                username=email,
+                password=password,
+            )
+            if not user:
+                raise serializers.ValidationError(
+                    _("Unable to log in with provided credentials."),
+                    code="authorization",
+                )
+            if not user.is_verified:
+                raise serializers.ValidationError(
+                    {"detail": _("User is not verified.")}
+                )
+        else:
+            raise serializers.ValidationError(
+                _('Must include "email" and "password".'), code="authorization"
+            )
+
+        attrs["user"] = user
+        return attrs
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -103,3 +136,26 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "birth_date",
         ]
         read_only_fields = ["email"]
+
+
+class ActivationResendSerializer(serializers.Serializer):
+    """
+    Serializer for handling email input to resend account activation emails.
+    """
+
+    email = serializers.EmailField(required=True)
+
+    def validate_email(self, value):
+        try:
+            user = User.objects.get(email=value)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("User does not exist.")
+
+        if user.is_verified:
+            raise serializers.ValidationError("User is already activated and verified.")
+
+        self.user = user
+        return value
+
+    def get_user(self):
+        return getattr(self, "user", None)
