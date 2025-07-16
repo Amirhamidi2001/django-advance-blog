@@ -218,7 +218,7 @@ class ActivationResendApiView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        user_obj = serializer.validated_data["user"]
+        user_obj = serializer.get_user()
         token = self.get_tokens_for_user(user_obj)
 
         try:

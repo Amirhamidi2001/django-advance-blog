@@ -10,3 +10,5 @@ drf-yasg==1.21.10
 django-mail-templated==2.6.5
 black==24.8.0
 flake8==7.0.0
+pytest==8.4.1 
+pytest-django==4.11.1
