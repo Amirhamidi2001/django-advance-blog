@@ -8,6 +8,7 @@ from blog.views import (
     PostCreateView,
     PostEditView,
     PostDeleteView,
+    PostListApiView,
 )
 
 app_name = "blog"
@@ -22,4 +23,5 @@ urlpatterns = [
     path("post/<int:pk>/edit/", PostEditView.as_view(), name="post-edit"),
     path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),
     path("api/v1/", include("blog.api.v1.urls")),
+    path("posts/api/", PostListApiView.as_view(), name="post-list-api"),
 ]

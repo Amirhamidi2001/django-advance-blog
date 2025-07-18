@@ -100,3 +100,11 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
     model = Post
     success_url = "/blog/post/"
+
+
+class PostListApiView(TemplateView):
+    """
+    View to render a template that displays a list of published blog posts using an API
+    """
+
+    template_name = "blog/post_list_api.html"

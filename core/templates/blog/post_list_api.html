@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post List</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .post {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .post h3 {
+            margin: 0;
+        }
+
+        .post small {
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Published Blog Posts</h1>
+    <div id="posts-container">
+        <p>Loading posts...</p>
+    </div>
+
+    <script>
+        // CSRF token helper (required for session-authenticated APIs)
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        // Set CSRF token in Ajax headers
+        $.ajaxSetup({
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        });
+
+        // Fetch post list
+        function fetchPosts() {
+            $.ajax({
+                url: 'http://127.0.0.1:8000/blog/api/v1/posts/',  // Update if your base URL is different
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $('#posts-container').empty();  // Clear loading message
+
+                    if (response.results && response.results.length > 0) {
+                        response.results.forEach(post => {
+                            $('#posts-container').append(`
+                                <div class="post">
+                                    <h3>${post.title}</h3>
+                                    <small>Published at: ${new Date(post.published_at).toLocaleString()}</small>
+                                    <p>${post.snippet}</p>
+                                </div>
+                            `);
+                        });
+                    } else {
+                        $('#posts-container').html('<p>No posts found.</p>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#posts-container').html(`<p style="color:red;">Error: ${error}</p>`);
+                }
+            });
+        }
+
+        // Load posts on page load
+        $(document).ready(function() {
+            fetchPosts();
+        });
+    </script>
+
+</body>
+</html>
