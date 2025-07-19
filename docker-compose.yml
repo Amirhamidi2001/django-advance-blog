@@ -24,3 +24,16 @@ services:
       - "25:25"
       - "143:143"
     restart: unless-stopped
+
+  locust:
+    image: locustio/locust:2.25.0  # or latest
+    container_name: locust
+    ports:
+      - "8089:8089"  # Locust web UI
+    volumes:
+      - ./core/locust:/mnt/locust  # locustfile.py path (adjusted to your structure)
+    command: >
+      -f /mnt/locust/locustfile.py
+      --host=http://web:8000
+    depends_on:
+      - web
